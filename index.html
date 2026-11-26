@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="webverse-world-origins" content="https://worlds.worldhub.me" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <link rel="icon" href="data:," />
+    <title>WebVerse</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #101014;
+      }
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: none;
+        outline: none;
+      }
+      /* Story 4.1 — instant inline splash (critical CSS; paints before the
+         runtime chunk arrives). The runtime feedback surface ADOPTS this
+         container (same node) for the loading overlay + error card. Themeable
+         via the --webverse-feedback-* custom properties (the default surface
+         is private/swappable — embedders opt out — so the webverse- naming is
+         the allowed implementation-identifier exception, like the log prefix). */
+      #webverse-feedback {
+        position: fixed;
+        inset: 0;
+        z-index: 10; /* below the debug HUD (20) */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: var(--webverse-feedback-bg, #101014);
+        color: var(--webverse-feedback-fg, #dfe3ea);
+        font: 14px/1.5 system-ui, sans-serif;
+        text-align: center;
+        pointer-events: none; /* never eat canvas input; buttons re-enable */
+      }
+      #webverse-feedback[data-webverse-feedback-state='hidden'] {
+        display: none;
+      }
+      #webverse-feedback .webverse-feedback-spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(223, 227, 234, 0.25);
+        border-top-color: var(--webverse-feedback-accent, #7aa2ff);
+        border-radius: 50%;
+        animation: webverse-feedback-spin 0.9s linear infinite;
+      }
+      @keyframes webverse-feedback-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #webverse-feedback button {
+        pointer-events: auto;
+        font: inherit;
+        color: inherit;
+        background: transparent;
+        border: 1px solid var(--webverse-feedback-fg, #dfe3ea);
+        border-radius: 4px;
+        padding: 6px 16px;
+        cursor: pointer;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-DCQC-odC.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-hePW80VL.js">
+    <link rel="modulepreload" crossorigin href="./assets/performanceConfigurator-UtxC_Odd.js">
+    <link rel="modulepreload" crossorigin href="./assets/observable.pure-BmPG9gPP.js">
+    <link rel="modulepreload" crossorigin href="./assets/engineStore-BfWggCZa.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.scalar.functions-BoB7CvbQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/typeStore-Cu_sj2zM.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.vector.pure-fvrN3Uzg.js">
+    <link rel="modulepreload" crossorigin href="./assets/shaderStore-D-XQlhUT.js">
+    <link rel="modulepreload" crossorigin href="./assets/vertexColorMixing-CLFsEsyT.js">
+    <link rel="modulepreload" crossorigin href="./assets/sceneUboDeclaration-B5VhSG0v.js">
+    <link rel="modulepreload" crossorigin href="./assets/meshUboDeclaration-BmNu2KU_.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultUboDeclaration-C53xcSdv.js">
+    <link rel="modulepreload" crossorigin href="./assets/helperFunctions-BXbvU0Ia.js">
+    <link rel="modulepreload" crossorigin href="./assets/mainUVVaryingDeclaration-BBamQlxR.js">
+    <link rel="modulepreload" crossorigin href="./assets/logDepthDeclaration-3gXGtHbI.js">
+    <link rel="modulepreload" crossorigin href="./assets/oitFragment-BYDkS-ga.js">
+    <link rel="modulepreload" crossorigin href="./assets/shadowsFragmentFunctions-CXgXm7dh.js">
+    <link rel="modulepreload" crossorigin href="./assets/lightFragment-CCmNhay_.js">
+    <link rel="modulepreload" crossorigin href="./assets/samplerFragmentDeclaration-3yaLawFX.js">
+    <link rel="modulepreload" crossorigin href="./assets/tools.functions-CqW-SPU8.js">
+    <link rel="modulepreload" crossorigin href="./assets/logger-CuBYPcDK.js">
+    <link rel="modulepreload" crossorigin href="./assets/domManagement-BqltO0ki.js">
+    <link rel="modulepreload" crossorigin href="./assets/devTools-Bh3wKyVb.js">
+    <link rel="modulepreload" crossorigin href="./assets/shaderProcessor-6ig155yw.js">
+    <link rel="modulepreload" crossorigin href="./assets/timingTools-DJ40Zbjg.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionDate-Uyb-ubD0.js">
+    <link rel="modulepreload" crossorigin href="./assets/effect.pure-CYUuPRVT.js">
+    <link rel="modulepreload" crossorigin href="./assets/internalTexture-BAAzY2db.js">
+    <link rel="modulepreload" crossorigin href="./assets/abstractEngine.pure-BmhhcQK0.js">
+    <link rel="modulepreload" crossorigin href="./assets/thinEngine.pure-AT75eKXw.js">
+    <link rel="modulepreload" crossorigin href="./assets/decorators-C_ra_8EP.js">
+    <link rel="modulepreload" crossorigin href="./assets/smartArray-BRfcgNbX.js">
+    <link rel="modulepreload" crossorigin href="./assets/webRequest-dqz0dHXK.js">
+    <link rel="modulepreload" crossorigin href="./assets/halfFloat-Ce77JD5z.js">
+    <link rel="modulepreload" crossorigin href="./assets/bufferUtils-q0fDaU_r.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileTools.pure-C6eimILT.js">
+    <link rel="modulepreload" crossorigin href="./assets/instantiationTools-1WO2H_H6.js">
+    <link rel="modulepreload" crossorigin href="./assets/guid-BXdVC_j_.js">
+    <link rel="modulepreload" crossorigin href="./assets/tools.pure-B1OBNFID.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.color.pure-HuMj10qI.js">
+    <link rel="modulepreload" crossorigin href="./assets/decorators.serialization-DKfdsw1x.js">
+    <link rel="modulepreload" crossorigin href="./assets/imageProcessingConfiguration.pure-Bsg8B6jZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/uniformBuffer-Bp30X9fY.js">
+    <link rel="modulepreload" crossorigin href="./assets/buffer.pure-B9PujaVE.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.plane-AVigh-My.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.frustum-W9T6XWut.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderingManager-BLBR7SGB.js">
+    <link rel="modulepreload" crossorigin href="./assets/sceneComponent-BJDthpAO.js">
+    <link rel="modulepreload" crossorigin href="./assets/pointerEvents-BaAbMMbu.js">
+    <link rel="modulepreload" crossorigin href="./assets/keyboardEvents-CGYiptFb.js">
+    <link rel="modulepreload" crossorigin href="./assets/perfCounter-CRcs6GOv.js">
+    <link rel="modulepreload" crossorigin href="./assets/lightConstants-DEt5a_Bl.js">
+    <link rel="modulepreload" crossorigin href="./assets/scene.pure-B2KY2W5y.js">
+    <link rel="modulepreload" crossorigin href="./assets/drawWrapper-ejx5f7ki.js">
+    <link rel="modulepreload" crossorigin href="./assets/material.pure-C04uRV7H.js">
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-HclGiUj8.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.size-BHZaDYSv.js">
+    <link rel="modulepreload" crossorigin href="./assets/baseTexture.pure-D6W7skrN.js">
+    <link rel="modulepreload" crossorigin href="./assets/compatibilityOptions-LFsOr3TN.js">
+    <link rel="modulepreload" crossorigin href="./assets/texture.pure-1CFFpn12.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.axis-CZ4XGrud.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.viewport-Cp0w6PSE.js">
+    <link rel="modulepreload" crossorigin href="./assets/abstractEngine.renderPass.pure-84iYTj5m.js">
+    <link rel="modulepreload" crossorigin href="./assets/node-CjDJFNE0.js">
+    <link rel="modulepreload" crossorigin href="./assets/mesh.pure-Cqm_3rXj.js">
+    <link rel="modulepreload" crossorigin href="./assets/sphericalPolynomial.pure-BGQfluqi.js">
+    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-9NGiUN4P.js">
+    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-BL5YG0qf.js">
+    <link rel="modulepreload" crossorigin href="./assets/abstractEngine.texture.pure-NuknKzFQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/textureLoaderManager-BUMO25kQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/light-DI5LwwnI.js">
+  </head>
+  <body>
+    <!-- tabindex + focus-on-load: keyboard listeners must not lose to DevTools focus (lessons-learned §8) -->
+    <canvas id="renderCanvas" tabindex="0"></canvas>
+    <!-- Story 4.1 — inline splash: shows BEFORE any JS (no blank-white gap on
+         the self-boot path); the runtime takes over this exact container. -->
+    <div id="webverse-feedback" data-webverse-feedback-state="splash" role="status" aria-live="polite">
+      <div class="webverse-feedback-spinner" aria-hidden="true"></div>
+      <p>Loading&#8230;</p>
+    </div>
+  </body>
+</html>

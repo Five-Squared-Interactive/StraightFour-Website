@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="webverse-import-frame" content="1" />
+    <style>
+/* Copyright (c) 2019-2026 Five Squared Interactive */
+/* SPDX-License-Identifier: MIT */
+
+/* The client as a page inside the outer page: a world frame, or the frame
+   kept for a visitor's file. Written into those two pages by the build and
+   into no other, so the client's own page looks as it always has.
+
+   The outer page floats its bar and panels over this page, and has one
+   menu. Two things of the client's own would argue with that:
+
+   - Its first-run help. The outer page's first card says how to look and
+     move, and the help would sit under the outer page's panels at the top.
+     It is not shown here at all.
+   - Its menu button, which looks like a second menu. What it opens is
+     still needed (the visitor's name, look speed, quality), so it stays,
+     as a small glass button with a settings mark in place of the three
+     bars, in the top left corner where the outer page puts nothing. On a
+     narrow window the outer bar is at the top, and the button sits under
+     it.
+
+   The glass matches the outer page's. This page cannot be told which look
+   the visitor picked out there, so it follows the device. */
+#webverse-controls-hint {
+  display: none !important;
+}
+/* The client's own controls and the cards it lays over the world are
+   controls, as the outer page's are: dragging across them or double-clicking
+   one selects nothing. Its fields stay selectable, and what people in the
+   world say to each other is left alone, to be copied. */
+[data-webverse-menu-button],
+[data-webverse-menu],
+[data-webverse-portal-card],
+[data-webverse-portal-label],
+[data-webverse-import],
+#webverse-feedback {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+[data-webverse-menu] input,
+[data-webverse-menu] select,
+[data-webverse-menu] textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+/* The client's own running commentary ("entered ..."). The outer page's
+   bar says where the visitor is. What people in the world say is not this
+   and is still shown. */
+[data-webverse-messages-line='shell'] {
+  display: none !important;
+}
+/* The client's own card for a place that did not open. The outer page says
+   that once, in its own words, with the ways on: a second card here, with
+   a button of its own, would be two messages for one thing. The client's
+   word on how a load is going is still shown. */
+#webverse-feedback[data-webverse-feedback-state='error'] {
+  display: none !important;
+}
+[data-webverse-menu-button] {
+  top: 20px !important;
+  left: 20px !important;
+  width: 44px !important;
+  height: 44px !important;
+  border: 1px solid rgb(255 255 255 / 0.18) !important;
+  background: rgb(24 24 30 / 0.72)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f4f2ec' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1'/%3E%3Ccircle cx='15' cy='7' r='2'/%3E%3Ccircle cx='9' cy='12' r='2'/%3E%3Ccircle cx='17' cy='17' r='2'/%3E%3C/svg%3E")
+    center / 22px 22px no-repeat !important;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 0.5);
+  /* The three bars are text; the settings mark above stands in for them. */
+  font-size: 0 !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+[data-webverse-menu-button]:focus-visible {
+  outline: 2px solid #c7d2fe;
+  outline-offset: 2px;
+}
+/* Wrapped by the page with the bar (the client marks itself when it is embedded and that page's word is in its
+   address): the bar's Menu has a Settings row for these settings, and one menu button is enough. */
+[data-webverse-wrapped] [data-webverse-menu-button] {
+  display: none !important;
+}
+/* The client's own Enter VR button, which only this page can press (a VR session starts from a press in the
+   page that draws the world). Here it is a glass headset button like the bar's own, at the bar's right end:
+   the bar leaves it room while this page says VR can be offered. Its words stay its name. */
+[data-webverse-xr-button] {
+  top: auto !important;
+  right: 12px !important;
+  bottom: 26px !important;
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border: 1px solid rgb(255 255 255 / 0.18) !important;
+  border-radius: 22px !important;
+  background: rgb(24 24 30 / 0.72)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f4f2ec' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M3 8h18v8h-6l-2-3h-2l-2 3H3z'/%3E%3C/svg%3E")
+    center / 24px 24px no-repeat !important;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 0.5);
+  font-size: 0 !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+/* Back from a load for VR, the one press it waits for: it stands out, with its line beside it. */
+[data-webverse-xr-button][data-webverse-xr-armed] {
+  outline: 3px solid #c7d2fe !important;
+  outline-offset: 3px;
+}
+#webverse-xr-note {
+  top: auto !important;
+  right: 64px !important;
+  bottom: 32px !important;
+  border-radius: 16px !important;
+  background: rgb(24 24 30 / 0.72) !important;
+}
+/* While the visitor walks the outer page puts its bar away; this page's own button steps aside the same way. */
+[data-webverse-walking] [data-webverse-xr-button],
+[data-webverse-walking] #webverse-xr-note {
+  display: none !important;
+}
+/* In full screen the outer page puts its bar away, and cannot tell this page so; this page sees the full screen
+   for itself, and its button is not left as the one thing on the screen. */
+@media (display-mode: fullscreen) {
+  [data-webverse-xr-button],
+  #webverse-xr-note {
+    display: none !important;
+  }
+}
+/* The settings panel opens from the top, and stops short of the bottom,
+   where the outer page floats its bar over this one: on a page of its own
+   it is centred and may be as tall as the window. */
+[data-webverse-menu] {
+  top: 20px !important;
+  transform: translateX(-50%) !important;
+  max-height: calc(100dvh - 132px) !important;
+  overflow-x: hidden;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 24px !important;
+  background: rgb(24 24 30 / 0.72) !important;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 0.5) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+/* Anything of the client's that has to scroll (the settings on a small
+   window, a long run of messages, an owner's lists) does so with a thin
+   bar in the panels' own light line, never the browser's grey one. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.35) transparent;
+}
+/* The card for a file being converted sits bottom left on the client's
+   own page. Here that corner is under the outer page's bar, so it sits
+   above it, and a long account of what went wrong scrolls inside the card. */
+[data-webverse-import] {
+  bottom: 92px !important;
+  max-height: calc(100dvh - 124px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+/* With a mouse on a window wide enough, the settings are set two to a row,
+   a name beside each control. One to a row, as the client has them, they
+   are taller than a laptop's window and scrolled. The lines that are not a
+   setting (the heading, a note, a tick, the buttons) keep the full width,
+   and the settings fill in around them in their own order. */
+@media (min-width: 721px) and (pointer: fine) {
+  [data-webverse-menu]:not([hidden]) {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr) max-content minmax(0, 1fr);
+    grid-auto-flow: dense;
+    align-items: center;
+    gap: 8px 12px;
+    width: min(680px, 92vw) !important;
+  }
+  [data-webverse-menu] > * {
+    margin: 0 !important;
+  }
+  [data-webverse-menu] > h2,
+  [data-webverse-menu] > p,
+  [data-webverse-menu] > button,
+  [data-webverse-menu] > label:has(input) {
+    grid-column: 1 / -1;
+  }
+}
+@media (prefers-color-scheme: light) {
+  [data-webverse-menu-button] {
+    border-color: rgb(255 255 255 / 0.75) !important;
+    background-color: rgb(255 255 255 / 0.72) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f1d1a' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1'/%3E%3Ccircle cx='15' cy='7' r='2'/%3E%3Ccircle cx='9' cy='12' r='2'/%3E%3Ccircle cx='17' cy='17' r='2'/%3E%3C/svg%3E") !important;
+    box-shadow: 0 8px 32px rgb(0 0 0 / 0.28);
+  }
+  [data-webverse-menu-button]:focus-visible {
+    outline-color: #4338ca;
+  }
+}
+/* The outer bar is one row at the top here (this page is as wide as the window, so it reads the same widths):
+   the menu button and the Enter VR button sit under it, the settings open under it and may run to the
+   bottom, and the card for a file sits in its own corner again. */
+@media (max-width: 720px), (pointer: coarse) {
+  [data-webverse-menu-button] {
+    top: 82px !important;
+    left: 12px !important;
+  }
+  [data-webverse-menu] {
+    top: 82px !important;
+    max-height: calc(100dvh - 94px) !important;
+  }
+  [data-webverse-import] {
+    bottom: 12px !important;
+    max-height: calc(100dvh - 136px);
+  }
+  [data-webverse-xr-button] {
+    top: 82px !important;
+    bottom: auto !important;
+  }
+  #webverse-xr-note {
+    top: 134px !important;
+    bottom: auto !important;
+  }
+}
+/* While the page shows the sticks (touch input marks the root), nothing of the client's own sits over them or
+   their round buttons, at any width: the Enter VR button and its line, the card for a file, a passing notice and
+   a world's question for the visitor all sit under the outer bar, and end above the highest touch button (300 px
+   up from the bottom), scrolling inside if they are long. */
+[data-webverse-touch] [data-webverse-xr-button] {
+  top: 82px !important;
+  bottom: auto !important;
+}
+[data-webverse-touch] #webverse-xr-note {
+  top: 134px !important;
+  bottom: auto !important;
+}
+[data-webverse-touch] [data-webverse-import] {
+  top: 82px !important;
+  bottom: auto !important;
+  max-height: calc(100dvh - 400px) !important;
+  overflow-y: auto;
+}
+/* Under the menu and Enter VR buttons, which share its row's ends. */
+[data-webverse-touch] [data-webverse-feedback-toast] {
+  top: 140px !important;
+  bottom: auto !important;
+  max-height: calc(100dvh - 460px) !important;
+  overflow-y: auto;
+}
+[data-webverse-touch] [data-webverse-consent] {
+  top: 82px !important;
+  bottom: auto !important;
+  max-height: calc(100dvh - 400px) !important;
+  overflow-y: auto;
+}
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <link rel="icon" href="data:," />
+    <title>WebVerse</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #101014;
+      }
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: none;
+        outline: none;
+      }
+      /* Story 4.1 — instant inline splash (critical CSS; paints before the
+         runtime chunk arrives). The runtime feedback surface ADOPTS this
+         container (same node) for the loading overlay + error card. Themeable
+         via the --webverse-feedback-* custom properties (the default surface
+         is private/swappable — embedders opt out — so the webverse- naming is
+         the allowed implementation-identifier exception, like the log prefix). */
+      #webverse-feedback {
+        position: fixed;
+        inset: 0;
+        z-index: 10; /* below the debug HUD (20) */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: var(--webverse-feedback-bg, #101014);
+        color: var(--webverse-feedback-fg, #dfe3ea);
+        font: 14px/1.5 system-ui, sans-serif;
+        text-align: center;
+        pointer-events: none; /* never eat canvas input; buttons re-enable */
+      }
+      #webverse-feedback[data-webverse-feedback-state='hidden'] {
+        display: none;
+      }
+      #webverse-feedback .webverse-feedback-spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(223, 227, 234, 0.25);
+        border-top-color: var(--webverse-feedback-accent, #7aa2ff);
+        border-radius: 50%;
+        animation: webverse-feedback-spin 0.9s linear infinite;
+      }
+      @keyframes webverse-feedback-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #webverse-feedback button {
+        pointer-events: auto;
+        font: inherit;
+        color: inherit;
+        background: transparent;
+        border: 1px solid var(--webverse-feedback-fg, #dfe3ea);
+        border-radius: 4px;
+        padding: 6px 16px;
+        cursor: pointer;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-DCQC-odC.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-hePW80VL.js">
+    <link rel="modulepreload" crossorigin href="./assets/performanceConfigurator-UtxC_Odd.js">
+    <link rel="modulepreload" crossorigin href="./assets/observable.pure-BmPG9gPP.js">
+    <link rel="modulepreload" crossorigin href="./assets/engineStore-BfWggCZa.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.scalar.functions-BoB7CvbQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/typeStore-Cu_sj2zM.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.vector.pure-fvrN3Uzg.js">
+    <link rel="modulepreload" crossorigin href="./assets/shaderStore-D-XQlhUT.js">
+    <link rel="modulepreload" crossorigin href="./assets/vertexColorMixing-CLFsEsyT.js">
+    <link rel="modulepreload" crossorigin href="./assets/sceneUboDeclaration-B5VhSG0v.js">
+    <link rel="modulepreload" crossorigin href="./assets/meshUboDeclaration-BmNu2KU_.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultUboDeclaration-C53xcSdv.js">
+    <link rel="modulepreload" crossorigin href="./assets/helperFunctions-BXbvU0Ia.js">
+    <link rel="modulepreload" crossorigin href="./assets/mainUVVaryingDeclaration-BBamQlxR.js">
+    <link rel="modulepreload" crossorigin href="./assets/logDepthDeclaration-3gXGtHbI.js">
+    <link rel="modulepreload" crossorigin href="./assets/oitFragment-BYDkS-ga.js">
+    <link rel="modulepreload" crossorigin href="./assets/shadowsFragmentFunctions-CXgXm7dh.js">
+    <link rel="modulepreload" crossorigin href="./assets/lightFragment-CCmNhay_.js">
+    <link rel="modulepreload" crossorigin href="./assets/samplerFragmentDeclaration-3yaLawFX.js">
+    <link rel="modulepreload" crossorigin href="./assets/tools.functions-CqW-SPU8.js">
+    <link rel="modulepreload" crossorigin href="./assets/logger-CuBYPcDK.js">
+    <link rel="modulepreload" crossorigin href="./assets/domManagement-BqltO0ki.js">
+    <link rel="modulepreload" crossorigin href="./assets/devTools-Bh3wKyVb.js">
+    <link rel="modulepreload" crossorigin href="./assets/shaderProcessor-6ig155yw.js">
+    <link rel="modulepreload" crossorigin href="./assets/timingTools-DJ40Zbjg.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionDate-Uyb-ubD0.js">
+    <link rel="modulepreload" crossorigin href="./assets/effect.pure-CYUuPRVT.js">
+    <link rel="modulepreload" crossorigin href="./assets/internalTexture-BAAzY2db.js">
+    <link rel="modulepreload" crossorigin href="./assets/abstractEngine.pure-BmhhcQK0.js">
+    <link rel="modulepreload" crossorigin href="./assets/thinEngine.pure-AT75eKXw.js">
+    <link rel="modulepreload" crossorigin href="./assets/decorators-C_ra_8EP.js">
+    <link rel="modulepreload" crossorigin href="./assets/smartArray-BRfcgNbX.js">
+    <link rel="modulepreload" crossorigin href="./assets/webRequest-dqz0dHXK.js">
+    <link rel="modulepreload" crossorigin href="./assets/halfFloat-Ce77JD5z.js">
+    <link rel="modulepreload" crossorigin href="./assets/bufferUtils-q0fDaU_r.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileTools.pure-C6eimILT.js">
+    <link rel="modulepreload" crossorigin href="./assets/instantiationTools-1WO2H_H6.js">
+    <link rel="modulepreload" crossorigin href="./assets/guid-BXdVC_j_.js">
+    <link rel="modulepreload" crossorigin href="./assets/tools.pure-B1OBNFID.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.color.pure-HuMj10qI.js">
+    <link rel="modulepreload" crossorigin href="./assets/decorators.serialization-DKfdsw1x.js">
+    <link rel="modulepreload" crossorigin href="./assets/imageProcessingConfiguration.pure-Bsg8B6jZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/uniformBuffer-Bp30X9fY.js">
+    <link rel="modulepreload" crossorigin href="./assets/buffer.pure-B9PujaVE.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.plane-AVigh-My.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.frustum-W9T6XWut.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderingManager-BLBR7SGB.js">
+    <link rel="modulepreload" crossorigin href="./assets/sceneComponent-BJDthpAO.js">
+    <link rel="modulepreload" crossorigin href="./assets/pointerEvents-BaAbMMbu.js">
+    <link rel="modulepreload" crossorigin href="./assets/keyboardEvents-CGYiptFb.js">
+    <link rel="modulepreload" crossorigin href="./assets/perfCounter-CRcs6GOv.js">
+    <link rel="modulepreload" crossorigin href="./assets/lightConstants-DEt5a_Bl.js">
+    <link rel="modulepreload" crossorigin href="./assets/scene.pure-B2KY2W5y.js">
+    <link rel="modulepreload" crossorigin href="./assets/drawWrapper-ejx5f7ki.js">
+    <link rel="modulepreload" crossorigin href="./assets/material.pure-C04uRV7H.js">
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-HclGiUj8.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.size-BHZaDYSv.js">
+    <link rel="modulepreload" crossorigin href="./assets/baseTexture.pure-D6W7skrN.js">
+    <link rel="modulepreload" crossorigin href="./assets/compatibilityOptions-LFsOr3TN.js">
+    <link rel="modulepreload" crossorigin href="./assets/texture.pure-1CFFpn12.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.axis-CZ4XGrud.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.viewport-Cp0w6PSE.js">
+    <link rel="modulepreload" crossorigin href="./assets/abstractEngine.renderPass.pure-84iYTj5m.js">
+    <link rel="modulepreload" crossorigin href="./assets/node-CjDJFNE0.js">
+    <link rel="modulepreload" crossorigin href="./assets/mesh.pure-Cqm_3rXj.js">
+    <link rel="modulepreload" crossorigin href="./assets/sphericalPolynomial.pure-BGQfluqi.js">
+    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-9NGiUN4P.js">
+    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-BL5YG0qf.js">
+    <link rel="modulepreload" crossorigin href="./assets/abstractEngine.texture.pure-NuknKzFQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/textureLoaderManager-BUMO25kQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/light-DI5LwwnI.js">
+  </head>
+  <body>
+    <!-- tabindex + focus-on-load: keyboard listeners must not lose to DevTools focus (lessons-learned §8) -->
+    <canvas id="renderCanvas" tabindex="0"></canvas>
+    <!-- Story 4.1 — inline splash: shows BEFORE any JS (no blank-white gap on
+         the self-boot path); the runtime takes over this exact container. -->
+    <div id="webverse-feedback" data-webverse-feedback-state="splash" role="status" aria-live="polite">
+      <div class="webverse-feedback-spinner" aria-hidden="true"></div>
+      <p>Loading&#8230;</p>
+    </div>
+  </body>
+</html>

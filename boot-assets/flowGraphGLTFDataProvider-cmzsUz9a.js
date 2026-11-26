@@ -1,0 +1,2 @@
+import{s as e,t}from"./flowGraphBlock-Dk4SHy0Z.js";import"./gltfChunk-CzbMrZw3.js";var n=class extends t{constructor(t){super(t);let n=t.glTF,r=n?.animations?.map(e=>e._babylonAnimationGroup)||[];this.animationGroups=this.registerDataOutput(`animationGroups`,e,r);let i=n?.nodes?.map(e=>e._babylonTransformNode)||[];this.nodes=this.registerDataOutput(`nodes`,e,i)}getClassName(){return`FlowGraphGLTFDataProvider`}};export{n as FlowGraphGLTFDataProvider};
+//# sourceMappingURL=flowGraphGLTFDataProvider-cmzsUz9a.js.map

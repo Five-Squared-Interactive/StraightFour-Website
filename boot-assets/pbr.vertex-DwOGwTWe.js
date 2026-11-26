@@ -1,0 +1,1 @@
+import{R as e}from"./gltfChunk-CzbMrZw3.js";export{e as pbrVertexShader};

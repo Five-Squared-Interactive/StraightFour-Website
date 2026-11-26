@@ -1,0 +1,2 @@
+var e;(function(e){e[e.GLSL=0]=`GLSL`,e[e.WGSL=1]=`WGSL`})(e||={});export{e as t};
+//# sourceMappingURL=shaderLanguage-CsgORKnQ.js.map

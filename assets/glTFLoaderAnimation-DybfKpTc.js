@@ -1,0 +1,1 @@
+import{S as e,_ as t,b as n,v as r,x as i,y as a}from"./gltfChunk-BxPby0S0.js";export{t as AnimationPropertyInfo,r as TransformNodeAnimationPropertyInfo,a as WeightAnimationPropertyInfo,n as getQuaternion,i as getVector3,e as getWeights};

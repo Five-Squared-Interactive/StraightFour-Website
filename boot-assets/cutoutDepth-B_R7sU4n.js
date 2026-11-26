@@ -1,0 +1,2 @@
+import{r as e}from"./buffer.pure-B9PujaVE.js";import"../webverse-boot.js";function t(t){let n=t.isReady.bind(t);t.isReady=(t,r)=>{let i=t.getMesh(),a=t.getMaterial()?.getAlphaTestTexture();if(!a||a.coordinatesIndex!==0||!i.isVerticesDataPresent(e.UV2Kind))return n(t,r);let o=Object.prototype.hasOwnProperty.call(i,`isVerticesDataPresent`),s=i.isVerticesDataPresent;i.isVerticesDataPresent=(t,...n)=>t!==e.UV2Kind&&s.call(i,t,...n);try{return n(t,r)}finally{o?i.isVerticesDataPresent=s:delete i.isVerticesDataPresent}}}export{t};
+//# sourceMappingURL=cutoutDepth-B_R7sU4n.js.map

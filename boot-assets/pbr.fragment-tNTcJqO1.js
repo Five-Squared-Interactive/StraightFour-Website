@@ -1,0 +1,1 @@
+import{w as e}from"./gltfChunk-CzbMrZw3.js";export{e as pbrPixelShader};

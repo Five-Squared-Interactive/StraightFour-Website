@@ -1,0 +1,2 @@
+function e(e){let t=new WeakSet,n=new Set,r=-1,i=!0,a=!1,o=e.onMaterialRemovedObservable.add(()=>{a=!0});return{take(o){if(i){for(let t of[...n])e.materials.includes(t)?o(t)!==!1&&n.delete(t):n.delete(t);if(!(e.materials.length===r&&!a)){r=e.materials.length,a=!1;for(let r of[...e.materials])t.has(r)||(t.add(r),o(r)===!1&&n.add(r))}}},dispose(){e.onMaterialRemovedObservable.remove(o),i=!1}}}export{e as t};
+//# sourceMappingURL=materialArrivals-BgDToscV.js.map

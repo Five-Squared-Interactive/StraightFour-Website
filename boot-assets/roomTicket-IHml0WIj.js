@@ -1,0 +1,2 @@
+async function e(e,t){let n=await t(e,{credentials:`same-origin`,cache:`no-store`});if(!n.ok)return null;let r=await n.json();return typeof r.ticket==`string`&&r.ticket?r.ticket:null}export{e as roomTicket};
+//# sourceMappingURL=roomTicket-IHml0WIj.js.map

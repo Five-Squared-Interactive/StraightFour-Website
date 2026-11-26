@@ -1,0 +1,2 @@
+var e=new WeakSet;function t(t,n){n?e.add(t):e.delete(t)}var n=t=>e.has(t);function r(t,n,r,i){if(e.has(t))return;let a=t.pluginManager?.getPlugin(n);if(!a)return i();if(!a.isEnabled)return a.rebind(r),a.isEnabled=!0,a}export{t as n,r,n as t};
+//# sourceMappingURL=awayMaterials-BFHT3hIB.js.map

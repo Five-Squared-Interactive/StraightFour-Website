@@ -1,0 +1,2 @@
+function e(e){if(!(!e||e.length>2048||!e.startsWith(`https://`)))try{return new URL(e).protocol===`https:`?e:void 0}catch{return}}async function t(t,n,r){try{let i=await r(t,{method:`POST`,headers:{authorization:`Bearer ${n}`}});if(!i.ok)return null;let a=await i.json(),o=typeof a.name==`string`?a.name.trim().slice(0,40):``,s=typeof a.avatar==`string`?e(a.avatar.trim()):void 0;return{...o?{name:o}:{},...s?{avatar:s}:{}}}catch{return null}}export{t as namedBySignIn};
+//# sourceMappingURL=namedBySignIn-BH9mxw9B.js.map

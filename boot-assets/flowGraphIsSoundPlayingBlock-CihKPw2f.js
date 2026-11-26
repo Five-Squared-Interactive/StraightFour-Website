@@ -1,0 +1,2 @@
+import{n as e}from"./typeStore-Cu_sj2zM.js";import{c as t,s as n}from"./flowGraphBlock-Dk4SHy0Z.js";import{t as r}from"./flowGraphCachedOperationBlock-DCZu3JFS.js";var i=class extends r{constructor(e){super(t,e),this.sound=this.registerDataInput(`sound`,n)}_doOperation(e){let t=this.sound.getValue(e);if(t)return t.state===3||t.state===2}getClassName(){return`FlowGraphIsSoundPlayingBlock`}},a=!1;function o(){a||(a=!0,e(`FlowGraphIsSoundPlayingBlock`,i))}o();export{i as FlowGraphIsSoundPlayingBlock};
+//# sourceMappingURL=flowGraphIsSoundPlayingBlock-CihKPw2f.js.map

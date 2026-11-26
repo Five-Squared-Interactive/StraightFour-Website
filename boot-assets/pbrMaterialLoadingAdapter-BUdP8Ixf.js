@@ -1,0 +1,1 @@
+import{h as e}from"./gltfChunk-CzbMrZw3.js";export{e as PBRMaterialLoadingAdapter};
