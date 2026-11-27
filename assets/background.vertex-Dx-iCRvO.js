@@ -1,0 +1,1 @@
+import{n as e}from"./photoDomeChunk-DDRe0qwF.js";export{e as backgroundVertexShader};
